@@ -1,0 +1,588 @@
+2013-04-12 16:05:58.882 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:08:38.902 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:08:39.436 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:09:35.660 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:11:00.956 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:11:06.752 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:11:06.959 [INFO] com.espertech.esper.core.service.StatementLifecycleSvcImpl:1028 - Failed to compile statement: Failed to resolve event type: Event type or class named 'mcomp.dissertation.subscribers.LinkTrafficAndWeather' was not found
+com.espertech.esper.epl.expression.ExprValidationException: Failed to resolve event type: Event type or class named 'mcomp.dissertation.subscribers.LinkTrafficAndWeather' was not found
+	at com.espertech.esper.epl.spec.FilterStreamSpecRaw.resolveType(FilterStreamSpecRaw.java:196)
+	at com.espertech.esper.epl.spec.FilterStreamSpecRaw.compile(FilterStreamSpecRaw.java:106)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.compile(StatementLifecycleSvcImpl.java:1022)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createStopped(StatementLifecycleSvcImpl.java:253)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createStoppedAssignName(StatementLifecycleSvcImpl.java:182)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createAndStart(StatementLifecycleSvcImpl.java:136)
+	at com.espertech.esper.core.service.EPAdministratorImpl.createEPLStmt(EPAdministratorImpl.java:117)
+	at com.espertech.esper.core.service.EPAdministratorImpl.createEPL(EPAdministratorImpl.java:66)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.<init>(LiveArchiveCombiner.java:113)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:157)
+2013-04-12 16:25:19.799 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:25:29.077 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:30:04.700 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:30:08.613 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:31:09.434 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:31:13.405 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:34:55.489 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:35:00.480 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:35:51.710 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:35:55.315 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:35:55.601 [INFO] com.espertech.esper.core.service.StatementLifecycleSvcImpl:1028 - Failed to compile statement: Failed to resolve event type: Event type or class named 'mcomp.dissertation.beans.LiveTrafficBeans' was not found
+com.espertech.esper.epl.expression.ExprValidationException: Failed to resolve event type: Event type or class named 'mcomp.dissertation.beans.LiveTrafficBeans' was not found
+	at com.espertech.esper.epl.spec.FilterStreamSpecRaw.resolveType(FilterStreamSpecRaw.java:196)
+	at com.espertech.esper.epl.spec.FilterStreamSpecRaw.compile(FilterStreamSpecRaw.java:106)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.compile(StatementLifecycleSvcImpl.java:1022)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createStopped(StatementLifecycleSvcImpl.java:253)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createStoppedAssignName(StatementLifecycleSvcImpl.java:182)
+	at com.espertech.esper.core.service.StatementLifecycleSvcImpl.createAndStart(StatementLifecycleSvcImpl.java:136)
+	at com.espertech.esper.core.service.EPAdministratorImpl.createEPLStmt(EPAdministratorImpl.java:117)
+	at com.espertech.esper.core.service.EPAdministratorImpl.createEPL(EPAdministratorImpl.java:66)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.<init>(LiveArchiveCombiner.java:113)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:157)
+2013-04-12 16:36:55.774 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:36:59.471 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:40:10.579 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:40:14.296 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:41:52.623 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:41:56.212 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:43:17.565 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:43:21.075 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:44:16.106 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:44:20.453 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:44:21.351 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:44:21.353 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:44:21.373 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:44:21.424 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:44:21.426 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=13837709, SoftIrq=0, Idle=39696575, Stolen=0, Wait=0, Total=89223316, Irq=373887, Nice=0, Sys=5947849}
+2013-04-12 16:44:21.427 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 772239360
+2013-04-12 16:44:21.428 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1236049920
+2013-04-12 16:44:21.428 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 6338816
+2013-04-12 16:44:21.429 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:44:21.595 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_1389308' version 4.9.0
+2013-04-12 16:45:42.934 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:45:47.130 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:45:47.769 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:45:47.771 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:45:47.798 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:45:48.011 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_10192886' version 4.9.0
+2013-04-12 16:45:48.027 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:45:48.047 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=13864400, SoftIrq=0, Idle=39819691, Stolen=0, Wait=0, Total=89482637, Irq=375244, Nice=0, Sys=5970922}
+2013-04-12 16:45:48.047 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 757542912
+2013-04-12 16:45:48.048 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1250746368
+2013-04-12 16:45:48.048 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 6292448
+2013-04-12 16:45:48.048 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:53:04.433 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:53:14.143 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:53:15.409 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:53:15.417 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:53:15.460 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:53:15.551 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:53:15.665 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14172066, SoftIrq=0, Idle=40305276, Stolen=0, Wait=0, Total=90825712, Irq=385650, Nice=0, Sys=6073055}
+2013-04-12 16:53:15.665 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 770248704
+2013-04-12 16:53:15.666 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1238040576
+2013-04-12 16:53:15.666 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 7903296
+2013-04-12 16:53:15.666 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:53:15.654 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_21545007' version 4.9.0
+2013-04-12 16:53:15.993 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_8984482' version 4.9.0
+2013-04-12 16:53:16.134 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_3676755' version 4.9.0
+2013-04-12 16:53:16.284 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_23387737' version 4.9.0
+2013-04-12 16:53:16.415 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:56:28.393 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:56:32.353 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:56:32.865 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:56:32.866 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:56:32.895 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:56:32.952 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:56:32.954 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14203001, SoftIrq=0, Idle=40630038, Stolen=0, Wait=0, Total=91418064, Irq=389534, Nice=0, Sys=6112259}
+2013-04-12 16:56:32.955 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 775286784
+2013-04-12 16:56:32.979 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1233002496
+2013-04-12 16:56:32.980 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 6071352
+2013-04-12 16:56:32.980 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:56:33.098 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_10192886' version 4.9.0
+2013-04-12 16:56:33.332 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_28465794' version 4.9.0
+2013-04-12 16:56:33.475 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_27905874' version 4.9.0
+2013-04-12 16:56:33.609 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_24384712' version 4.9.0
+2013-04-12 16:56:33.735 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:56:36.248 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:51 - Unable to connect to database. Please check the settings
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:355)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:317)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.openDBConnection(DBConnect.java:44)
+	at mcomp.dissertation.streamers.AbstractLoader.<init>(AbstractLoader.java:26)
+	at mcomp.dissertation.streamers.RecordLoader.<init>(RecordLoader.java:32)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.setUpArchiveStreams(LiveArchiveCombiner.java:243)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:165)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(Unknown Source)
+	at java.net.PlainSocketImpl.connectToAddress(Unknown Source)
+	at java.net.PlainSocketImpl.connect(Unknown Source)
+	at java.net.SocksSocketImpl.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:305)
+	... 19 more
+2013-04-12 16:56:36.259 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:56:37.258 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:51 - Unable to connect to database. Please check the settings
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:355)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:317)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.openDBConnection(DBConnect.java:44)
+	at mcomp.dissertation.streamers.AbstractLoader.<init>(AbstractLoader.java:26)
+	at mcomp.dissertation.streamers.RecordLoader.<init>(RecordLoader.java:32)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.setUpArchiveStreams(LiveArchiveCombiner.java:243)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:165)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(Unknown Source)
+	at java.net.PlainSocketImpl.connectToAddress(Unknown Source)
+	at java.net.PlainSocketImpl.connect(Unknown Source)
+	at java.net.SocksSocketImpl.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:305)
+	... 19 more
+2013-04-12 16:56:37.269 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:56:38.268 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:51 - Unable to connect to database. Please check the settings
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:355)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:317)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.openDBConnection(DBConnect.java:44)
+	at mcomp.dissertation.streamers.AbstractLoader.<init>(AbstractLoader.java:26)
+	at mcomp.dissertation.streamers.RecordLoader.<init>(RecordLoader.java:32)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.setUpArchiveStreams(LiveArchiveCombiner.java:243)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:165)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(Unknown Source)
+	at java.net.PlainSocketImpl.connectToAddress(Unknown Source)
+	at java.net.PlainSocketImpl.connect(Unknown Source)
+	at java.net.SocksSocketImpl.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:305)
+	... 19 more
+2013-04-12 16:56:38.287 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:56:39.281 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:51 - Unable to connect to database. Please check the settings
+com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1121)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:355)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2479)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2516)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2301)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:834)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:416)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:317)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at java.sql.DriverManager.getConnection(Unknown Source)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.openDBConnection(DBConnect.java:44)
+	at mcomp.dissertation.streamers.AbstractLoader.<init>(AbstractLoader.java:26)
+	at mcomp.dissertation.streamers.RecordLoader.<init>(RecordLoader.java:32)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.setUpArchiveStreams(LiveArchiveCombiner.java:243)
+	at mcomp.dissertation.streamers.LiveArchiveCombiner.main(LiveArchiveCombiner.java:165)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(Unknown Source)
+	at java.net.PlainSocketImpl.connectToAddress(Unknown Source)
+	at java.net.PlainSocketImpl.connect(Unknown Source)
+	at java.net.SocksSocketImpl.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at java.net.Socket.<init>(Unknown Source)
+	at com.mysql.jdbc.StandardSocketFactory.connect(StandardSocketFactory.java:259)
+	at com.mysql.jdbc.MysqlIO.<init>(MysqlIO.java:305)
+	... 19 more
+2013-04-12 16:56:39.297 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:46.728 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:57:50.569 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:57:51.429 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:57:51.431 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:57:51.450 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:57:51.484 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:57:51.485 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14227306, SoftIrq=0, Idle=40744668, Stolen=0, Wait=0, Total=91653657, Irq=391312, Nice=0, Sys=6130386}
+2013-04-12 16:57:51.487 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 694767616
+2013-04-12 16:57:51.487 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1313521664
+2013-04-12 16:57:51.488 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 8410320
+2013-04-12 16:57:51.488 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:57:51.629 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_16059004' version 4.9.0
+2013-04-12 16:57:51.950 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_9343550' version 4.9.0
+2013-04-12 16:57:52.294 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_22145756' version 4.9.0
+2013-04-12 16:57:52.436 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_9372282' version 4.9.0
+2013-04-12 16:57:52.567 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.439 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:53.441 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.500 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:53.502 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.549 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:53.554 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.584 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:53.592 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.633 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:53.636 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:57:53.669 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:57:55.904 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:55.910 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:55.909 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:55.907 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:55.909 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:55.909 [ERROR] mcomp.dissertation.rdbmsaccess.DBConnect:79 - Unable to retreive records
+com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: Unknown column 'INTERVAL0MINUTE' in 'on clause'
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.Util.getInstance(Util.java:386)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1054)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4120)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4052)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2503)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2664)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2815)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2322)
+	at mcomp.dissertation.rdbmsaccess.DBConnect.retrieveWithinTimeStamp(DBConnect.java:76)
+	at mcomp.dissertation.streamers.RecordLoader.run(RecordLoader.java:41)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$101(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.runPeriodic(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+2013-04-12 16:57:56.245 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 8080
+2013-04-12 16:57:56.276 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 9090
+2013-04-12 16:59:18.470 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 16:59:22.426 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 16:59:22.909 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:59:22.911 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 16:59:22.974 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 16:59:22.984 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14251330, SoftIrq=0, Idle=40884804, Stolen=0, Wait=0, Total=91928141, Irq=393481, Nice=0, Sys=6149215}
+2013-04-12 16:59:22.985 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 712323072
+2013-04-12 16:59:22.985 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1295966208
+2013-04-12 16:59:22.986 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 6411528
+2013-04-12 16:59:22.986 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 16:59:23.026 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 16:59:23.189 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_24758223' version 4.9.0
+2013-04-12 16:59:23.425 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_3966697' version 4.9.0
+2013-04-12 16:59:23.573 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_17423547' version 4.9.0
+2013-04-12 16:59:23.709 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_3475648' version 4.9.0
+2013-04-12 16:59:23.842 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.461 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:24.467 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.517 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:24.535 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.573 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:24.574 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.609 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:24.616 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.652 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:24.653 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 16:59:24.677 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 16:59:25.079 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-13 00:00:00.0
+2013-04-12 16:59:25.172 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-11 00:00:00.0
+2013-04-12 16:59:25.232 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-12 00:00:00.0
+2013-04-12 16:59:25.412 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 8080
+2013-04-12 16:59:25.221 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-15 00:00:00.0
+2013-04-12 16:59:25.710 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-16 00:00:00.0
+2013-04-12 16:59:25.743 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-14 00:00:00.0
+2013-04-12 16:59:25.942 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 9090
+2013-04-12 17:04:47.536 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 17:05:09.510 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 17:05:11.543 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 17:05:11.544 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 17:05:11.615 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 17:05:11.831 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_28965003' version 4.9.0
+2013-04-12 17:05:11.890 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 17:05:11.944 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14500573, SoftIrq=0, Idle=41239753, Stolen=0, Wait=0, Total=92974314, Irq=403776, Nice=0, Sys=6242472}
+2013-04-12 17:05:11.945 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 688594944
+2013-04-12 17:05:11.945 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1319694336
+2013-04-12 17:05:11.946 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 6662928
+2013-04-12 17:05:11.946 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 17:05:12.321 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_25634653' version 4.9.0
+2013-04-12 17:05:12.466 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_3824284' version 4.9.0
+2013-04-12 17:05:13.066 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_12793391' version 4.9.0
+2013-04-12 17:05:13.193 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.305 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:17.308 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.366 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:17.373 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.474 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:17.488 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.526 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:17.572 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.626 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:17.670 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:05:17.535 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-11 00:00:00.0
+2013-04-12 17:05:17.602 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-12 00:00:00.0
+2013-04-12 17:05:17.772 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:05:18.305 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-14 00:00:00.0
+2013-04-12 17:05:18.432 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-16 00:00:00.0
+2013-04-12 17:05:18.436 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-13 00:00:00.0
+2013-04-12 17:05:18.516 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-15 00:00:00.0
+2013-04-12 17:05:21.501 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 8080
+2013-04-12 17:05:21.824 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 9090
+2013-04-12 17:05:27.171 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:05:27.171 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:05:27.173 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:05:27.174 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:05:27.174 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:05:27.175 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:02.557 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVEARCHIVEJOIN' version 4.9.0
+2013-04-12 17:09:25.282 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'LIVETRAFFICRAINJOINER' version 4.9.0
+2013-04-12 17:09:26.598 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 0: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 17:09:26.602 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:61 - CPU 1: {TotalSockets=2, Mhz=2161, Model=Pentium(R) Dual  CPU  T3400  @ 2.16GHz, TotalCores=2, Vendor=Intel, CoresPerSocket=1}
+2013-04-12 17:09:26.673 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'GROUPBYRAIN' version 4.9.0
+2013-04-12 17:09:26.745 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:114 - System RAM available 1920
+2013-04-12 17:09:26.747 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:115 - Information about the CPU {User=14687446, SoftIrq=0, Idle=41473801, Stolen=0, Wait=0, Total=93739452, Irq=415507, Nice=0, Sys=6331643}
+2013-04-12 17:09:26.748 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:116 - Total memory free 726855680
+2013-04-12 17:09:26.749 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:117 - Total memory used 1281433600
+2013-04-12 17:09:26.749 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:118 - JVM free memory 7912816
+2013-04-12 17:09:26.750 [INFO] mcomp.dissertation.streamers.SigarSystemMonitor:119 - JVM total memory 16318464
+2013-04-12 17:09:26.918 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_2950275' version 4.9.0
+2013-04-12 17:09:27.251 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_26193147' version 4.9.0
+2013-04-12 17:09:27.397 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_12482151' version 4.9.0
+2013-04-12 17:09:27.531 [INFO] com.espertech.esper.core.service.EPServiceProviderImpl:393 - Initializing engine URI 'RAIN_CATEGORY_31834937' version 4.9.0
+2013-04-12 17:09:27.669 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:28.910 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:28.912 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:28.977 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:28.984 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:29.050 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-12 00:00:00.0
+2013-04-12 17:09:29.053 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-11 00:00:00.0
+2013-04-12 17:09:29.090 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:29.201 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-13 00:00:00.0
+2013-04-12 17:09:29.348 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:29.459 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:29.497 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:29.603 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:29.612 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-14 00:00:00.0
+2013-04-12 17:09:29.714 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-15 00:00:00.0
+2013-04-12 17:09:29.837 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:52 - Wait for the initial data base load before streaming..
+2013-04-12 17:09:29.951 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:47 - Connected to MySQL
+2013-04-12 17:09:30.252 [INFO] mcomp.dissertation.rdbmsaccess.DBConnect:77 - Fetched records at time 2011-04-16 00:00:00.0
+2013-04-12 17:09:32.920 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 8080
+2013-04-12 17:09:33.230 [INFO] mcomp.dissertation.helpers.NettyServer:67 - Started server on port 9090
+2013-04-12 17:09:41.011 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:41.066 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:41.113 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:41.597 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:41.597 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
+2013-04-12 17:09:41.601 [INFO] mcomp.dissertation.streamers.GenericArchiveStreamer:55 - Awake!! Starting to stream now
