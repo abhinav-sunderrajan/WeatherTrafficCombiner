@@ -4,13 +4,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Bean class representing the LTA link data.
+ * Bean class representing the dummy traffic link data.
  */
 public class LiveTrafficBean implements Serializable {
-
-   /**
-    * 
-    */
    private static final long serialVersionUID = -2023628198459947776L;
    private long linkId;
    private Timestamp timeStamp;

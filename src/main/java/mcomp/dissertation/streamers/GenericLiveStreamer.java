@@ -7,7 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import mcomp.dissertation.helpers.NettyServer;
 
@@ -45,7 +44,6 @@ public class GenericLiveStreamer<E> implements Runnable {
       this.executor = executor;
       this.streamRate = streamRate;
       this.port = port;
-      new AtomicLong(0);
       startListening();
       executor.scheduleAtFixedRate(new ThroughputMeasure(), 30, 30,
             TimeUnit.SECONDS);
@@ -67,11 +65,8 @@ public class GenericLiveStreamer<E> implements Runnable {
          monitor.notifyAll();
       }
       E obj = buffer.poll();
-
       cepRTLiveArchive.sendEvent(obj);
-
       count++;
-
    }
 
    public ScheduledFuture<?> startStreaming() {

@@ -29,7 +29,7 @@ public class RecordLoader<T> extends AbstractLoader<T> {
    public RecordLoader(final ConcurrentLinkedQueue<T> buffer,
          final long startTime, final Properties connectionProperties,
          final Object monitor) {
-      super(buffer, connectionProperties);
+      super(buffer, connectionProperties, monitor);
       this.startTime = new Timestamp(startTime);
       wakeFlag = true;
 
@@ -38,7 +38,7 @@ public class RecordLoader<T> extends AbstractLoader<T> {
    @SuppressWarnings("unchecked")
    public void run() {
       try {
-         ResultSet rs = dbconnect.retrieveWithinTimeStamp(startTime);
+         ResultSet rs = dbconnect.retrieveAtTimeStamp(startTime);
          while (rs.next()) {
             LinkTrafficAndWeather bean = new LinkTrafficAndWeather();
             bean.setLinkId(rs.getLong(1));
@@ -53,7 +53,7 @@ public class RecordLoader<T> extends AbstractLoader<T> {
 
          if (wakeFlag) {
             synchronized (monitor) {
-               LOGGER.info("Wait for live streams before further databse loading");
+               LOGGER.info("Wait for live streams before further database loading");
                monitor.wait();
                LOGGER.info("Receiving live streams. Start database load normally");
             }

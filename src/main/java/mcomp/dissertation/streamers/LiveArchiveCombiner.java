@@ -38,10 +38,10 @@ import com.espertech.esper.client.EPStatement;
 
 public class LiveArchiveCombiner {
    private long startTime;
-   private EPServiceProvider cepLiveArchive;
-   private EPAdministrator cepAdmLiveArchive;
-   private Configuration cepConfigLiveArchive;
-   private EPRuntime cepRTLiveArchive;
+   private EPServiceProvider cepLiveTrafficWeatherJoin;
+   private EPAdministrator cepAdmLiveTrafficWeatherJoin;
+   private Configuration cepConfigLiveTrafficWeatherJoin;
+   private EPRuntime cepRTLiveTrafficWeatherJoin;
    private LiveArchiveJoiner[] joiners;
    private static ScheduledExecutorService executor;
    private static Properties connectionProperties;
@@ -95,21 +95,22 @@ public class LiveArchiveCombiner {
                .getTime();
 
          // Instantiate the Esper parameter arrays
-         cepConfigLiveArchive = new Configuration();
-         cepConfigLiveArchive.getEngineDefaults().getThreading()
+         cepConfigLiveTrafficWeatherJoin = new Configuration();
+         cepConfigLiveTrafficWeatherJoin.getEngineDefaults().getThreading()
                .setListenerDispatchPreserveOrder(false);
-         cepLiveArchive = EPServiceProviderManager.getProvider(
-               "LIVETRAFFICRAINJOINER", cepConfigLiveArchive);
-         cepConfigLiveArchive.addEventType("TRAFFICBEAN",
+         cepLiveTrafficWeatherJoin = EPServiceProviderManager.getProvider(
+               "LIVETRAFFICRAINJOINER", cepConfigLiveTrafficWeatherJoin);
+         cepConfigLiveTrafficWeatherJoin.addEventType("TRAFFICBEAN",
                LiveTrafficBean.class.getName());
-         cepConfigLiveArchive.addEventType("WEATHERBEAN",
+         cepConfigLiveTrafficWeatherJoin.addEventType("WEATHERBEAN",
                LiveWeatherBean.class.getName());
-         cepRTLiveArchive = cepLiveArchive.getEPRuntime();
-         cepAdmLiveArchive = cepLiveArchive.getEPAdministrator();
+         cepRTLiveTrafficWeatherJoin = cepLiveTrafficWeatherJoin.getEPRuntime();
+         cepAdmLiveTrafficWeatherJoin = cepLiveTrafficWeatherJoin
+               .getEPAdministrator();
          EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
-         String[] filters = helper.getFilterArrayForLiveJoin();
+         String[] filters = helper.getFilterArrayForLiveJoin(dbLoadRate);
          for (int count = 0; count < filters.length; count++) {
-            EPStatement cepStatement = cepAdmLiveArchive
+            EPStatement cepStatement = cepAdmLiveTrafficWeatherJoin
                   .createEPL(filters[count]);
             cepStatement.setSubscriber(joiners[count]);
          }
@@ -177,15 +178,15 @@ public class LiveArchiveCombiner {
             if (streamName.equalsIgnoreCase("traffic")) {
                ConcurrentLinkedQueue<LiveTrafficBean> buffer = new ConcurrentLinkedQueue<LiveTrafficBean>();
                GenericLiveStreamer<LiveTrafficBean> streamer = new GenericLiveStreamer<LiveTrafficBean>(
-                     buffer, core.cepRTLiveArchive, monitor, executor,
-                     streamRate, df, serverPort);
+                     buffer, core.cepRTLiveTrafficWeatherJoin, monitor,
+                     executor, streamRate, df, serverPort);
                streamer.startStreaming();
 
             } else {
                ConcurrentLinkedQueue<LiveWeatherBean> buffer = new ConcurrentLinkedQueue<LiveWeatherBean>();
                GenericLiveStreamer<LiveWeatherBean> streamer = new GenericLiveStreamer<LiveWeatherBean>(
-                     buffer, core.cepRTLiveArchive, monitor, executor,
-                     streamRate, df, serverPort);
+                     buffer, core.cepRTLiveTrafficWeatherJoin, monitor,
+                     executor, streamRate, df, serverPort);
                streamer.startStreaming();
 
             }
@@ -209,42 +210,57 @@ public class LiveArchiveCombiner {
       AbstractLoader<LinkTrafficAndWeather>[] loaders = new AbstractLoader[numberOfArchiveStreams];
       ScheduledFuture<?>[] dbLoadFutures = new ScheduledFuture[numberOfArchiveStreams];
 
-      Configuration cepConfigFilter = new Configuration();
-      cepConfigFilter.getEngineDefaults().getThreading()
-            .setListenerDispatchPreserveOrder(false);
-      EPServiceProvider cepFilter = EPServiceProviderManager.getProvider(
-            "GROUPBYRAIN", cepConfigFilter);
-      cepConfigFilter.addEventType("LINKWEATHERANDTRAFFIC",
-            LinkTrafficAndWeather.class.getName());
-      EPRuntime cepRTFilter = cepFilter.getEPRuntime();
-      EPAdministrator cepAdmFilter = cepFilter.getEPAdministrator();
-      EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
-      String[] filters = helper.getFilterArrayForArchive();
+      // Set up Esper engine instance to filter the archive data stream based on
+      // the rain received at each link. Assigning an Esper filter instance for
+      // each day of archive data in the hope of speeding up the process.
 
-      // Filter by rain in the link id
-      for (int count = 0; count < filters.length; count++) {
-         EPStatement cepStatement = cepAdmFilter.createEPL(filters[count]);
-         cepStatement.setSubscriber(new FilteredByRain(joiners[count],
-               dbLoadRate));
-      }
-
+      Configuration[] cepConfigFilterArray = new Configuration[numberOfArchiveStreams];
+      EPServiceProvider[] cepFilterArray = new EPServiceProvider[numberOfArchiveStreams];
+      EPRuntime cepRTFilterArray[] = new EPRuntime[numberOfArchiveStreams];
+      EPAdministrator[] cepAdmFilterArray = new EPAdministrator[numberOfArchiveStreams];
       ConcurrentLinkedQueue<LinkTrafficAndWeather>[] buffer = new ConcurrentLinkedQueue[numberOfArchiveStreams];
 
-      // Create a shared buffer between the thread retrieving records from
-      // the database and the the thread streaming those records.
+      EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
+      String[] filters = helper.getFilterArrayForArchive();
+      FilteredByRain[] filterSubscribers = new FilteredByRain[filters.length];
+      for (int filterCount = 0; filterCount < filters.length; filterCount++) {
+         filterSubscribers[filterCount] = new FilteredByRain(
+               joiners[filterCount], dbLoadRate,
+               (int) (streamRate.get() * Float.parseFloat(configProperties
+                     .getProperty("archive.stream.rate.param"))));
+      }
+
       for (int count = 0; count < numberOfArchiveStreams; count++) {
+         cepConfigFilterArray[count] = new Configuration();
+         cepConfigFilterArray[count].getEngineDefaults().getThreading()
+               .setListenerDispatchPreserveOrder(false);
+         cepConfigFilterArray[count].addEventType("LINKWEATHERANDTRAFFIC",
+               LinkTrafficAndWeather.class.getName());
+         cepFilterArray[count] = EPServiceProviderManager
+               .getProvider("FILTER_AND_GROUP_BY_RAIN_" + count,
+                     cepConfigFilterArray[count]);
+         cepRTFilterArray[count] = cepFilterArray[count].getEPRuntime();
+         cepAdmFilterArray[count] = cepFilterArray[count].getEPAdministrator();
+         // Filter by rain in the link id
+         for (int filterCount = 0; filterCount < filters.length; filterCount++) {
+            EPStatement cepStatement = cepAdmFilterArray[count]
+                  .createEPL(filters[filterCount]);
+            cepStatement.setSubscriber(filterSubscribers[filterCount]);
+         }
          buffer[count] = new ConcurrentLinkedQueue<LinkTrafficAndWeather>();
+
          streamers[count] = new GenericArchiveStreamer<LinkTrafficAndWeather>(
-               buffer[count], cepRTFilter, monitor, executor, streamRate,
-               Float.parseFloat(configProperties
+               buffer[count], cepRTFilterArray[count], monitor, executor,
+               streamRate, Float.parseFloat(configProperties
                      .getProperty("archive.stream.rate.param")));
          archiveStreamFutures[count] = streamers[count].startStreaming();
+
          loaders[count] = new RecordLoader<LinkTrafficAndWeather>(
                buffer[count], startTime, connectionProperties, monitor);
 
-         // retrieve records from the database for every 30,000 records from the
-         // live stream. This really depends upon the nature of the live
-         // stream..
+         // retrieve records from the database for roughly every 30,000 records
+         // from the live stream. This really depends upon the nature of the
+         // live stream..
          dbLoadFutures[count] = executor.scheduleAtFixedRate(loaders[count], 0,
                dbLoadRate, TimeUnit.SECONDS);
          // Start the next archive stream for the records exactly a day after

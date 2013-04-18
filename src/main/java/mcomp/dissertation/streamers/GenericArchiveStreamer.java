@@ -49,7 +49,7 @@ public class GenericArchiveStreamer<T> implements Runnable {
       // threads. Applicable only for the first time.
       if (count == 0) {
          synchronized (monitor) {
-            LOGGER.info("Wait for the initial data base load before streaming..");
+            LOGGER.info("Wait for live data load before streaming archive data..");
             try {
                monitor.wait();
                LOGGER.info("Awake!! Starting to stream now");
@@ -64,7 +64,6 @@ public class GenericArchiveStreamer<T> implements Runnable {
       }
 
       T obj = buffer.poll();
-
       cepRT.sendEvent(obj);
       count++;
 
@@ -74,6 +73,7 @@ public class GenericArchiveStreamer<T> implements Runnable {
 
       // Drive the archive stream a bit faster than the live to compensate for
       // the time required for aggregation.
+      LOGGER.info((long) (streamRate.get() * streamRateSpeedUp));
       ScheduledFuture<?> archiveFuture = executor.scheduleAtFixedRate(this, 0,
             (long) (streamRate.get() * streamRateSpeedUp),
             TimeUnit.MICROSECONDS);

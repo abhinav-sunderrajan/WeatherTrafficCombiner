@@ -10,7 +10,6 @@ public abstract class AbstractLoader<T> implements Runnable {
    private Queue<T> buffer;
    protected DBConnect dbconnect;
    protected Object monitor;
-   protected boolean wakeFlag;
    protected static final long REFRESH_INTERVAL = 300000;
 
    /**
@@ -20,11 +19,11 @@ public abstract class AbstractLoader<T> implements Runnable {
     * @param monitor
     */
    public AbstractLoader(final ConcurrentLinkedQueue<T> buffer,
-         final Properties connectionProperties) {
+         final Properties connectionProperties, final Object monitor) {
       this.buffer = buffer;
+      this.monitor = monitor;
       dbconnect = new DBConnect();
       dbconnect.openDBConnection(connectionProperties);
-      this.wakeFlag = true;
 
    }
 

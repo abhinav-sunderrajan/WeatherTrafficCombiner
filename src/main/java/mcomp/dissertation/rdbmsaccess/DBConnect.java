@@ -61,7 +61,7 @@ public class DBConnect {
     * @return ResultSet
     * @throws SQLException
     */
-   public ResultSet retrieveWithinTimeStamp(final Timestamp start)
+   public ResultSet retrieveAtTimeStamp(final Timestamp start)
          throws SQLException {
       String SELECT_QUERY = "SELECT traffic.linkid,traffic.speed,traffic.volume,weather.temperature,weather.rain "
             + ",traffic.time_stamp,weather.time_stamp FROM dataarchive AS traffic INNER JOIN linkweather AS "

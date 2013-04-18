@@ -83,12 +83,12 @@ public class FinalSubscriber {
       if (count % 1000 == 0) {
          LOGGER.info("linkid(" + liveLinkId + "<-->" + archivelinkId
                + ") speed(" + liveSpeed + "<-->" + archiveSpeed + ") volume("
-               + liveVolume + "<-->" + archiveVolume + " rain(" + liveRain
-               + "<-->" + archiveRain + " temperature(" + liveTemperature
-               + "<-->" + archiveTemperature + " at time " + liveTime);
+               + liveVolume + "<-->" + archiveVolume + " )rain(" + liveRain
+               + "<-->" + archiveRain + ") temperature(" + liveTemperature
+               + "<-->" + archiveTemperature + ") at time " + liveTime);
       }
-      if (count % 5000 == 0) {
-         double throughput = ((5000 * 1000) / (Calendar.getInstance()
+      if (count % 1000 == 0) {
+         double throughput = ((1000 * 1000) / (Calendar.getInstance()
                .getTimeInMillis() - timer.get()));
          latency = Calendar.getInstance().getTimeInMillis() - evalTime;
          valueMap.put((1 + this.hashCode()), latency / 1.0);

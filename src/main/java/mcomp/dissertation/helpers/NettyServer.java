@@ -33,6 +33,7 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 public class NettyServer<E> {
    private ServerBootstrap bootstrap;
    private Queue<E> buffer;
+   private Channel channel;
    private static ChannelFactory factory;
    private static final Logger LOGGER = Logger.getLogger(NettyServer.class);
 
@@ -55,6 +56,7 @@ public class NettyServer<E> {
       bootstrap.setOption("child.tcpNoDelay", true);
       bootstrap.setOption("child.keepAlive", true);
       this.buffer = buffer;
+      Runtime.getRuntime().addShutdownHook(new Hook());
 
    }
 
@@ -63,7 +65,7 @@ public class NettyServer<E> {
     * @param port
     */
    public void listen(final int port) {
-      bootstrap.bind(new InetSocketAddress(port));
+      channel = bootstrap.bind(new InetSocketAddress(port));
       LOGGER.info("Started server on port " + port);
    }
 
@@ -94,6 +96,14 @@ public class NettyServer<E> {
       public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
          e.getCause().printStackTrace();
          e.getChannel().close();
+      }
+   }
+
+   private class Hook extends Thread {
+      public void run() {
+         LOGGER.info("");
+         channel.close();
+         bootstrap.shutdown();
       }
    }
 

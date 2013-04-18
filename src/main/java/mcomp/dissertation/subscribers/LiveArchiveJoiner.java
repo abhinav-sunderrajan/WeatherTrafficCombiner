@@ -1,9 +1,13 @@
 package mcomp.dissertation.subscribers;
 
 import java.sql.Timestamp;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mcomp.dissertation.beans.LinkTrafficAndWeather;
 import mcomp.dissertation.helpers.EPLQueryRetrieve;
+
+import org.apache.log4j.Logger;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPAdministrator;
@@ -18,13 +22,19 @@ public class LiveArchiveJoiner {
    private EPRuntime cepRTLiveArchiveJoin;
    private EPAdministrator cepAdmLiveArchiveJoin;
    private EPStatement cepStatement;
+   private int count = 0;
+   private Queue<LinkTrafficAndWeather> queue;
+   private static final Logger LOGGER = Logger
+         .getLogger(LiveArchiveJoiner.class);
 
    public LiveArchiveJoiner(long dbLoadRate) {
+
+      queue = new ConcurrentLinkedQueue<LinkTrafficAndWeather>();
       cepConfigLiveArchiveJoin = new Configuration();
       cepConfigLiveArchiveJoin.getEngineDefaults().getThreading()
             .setListenerDispatchPreserveOrder(false);
       cepLiveArchiveJoin = EPServiceProviderManager.getProvider(
-            "LIVEARCHIVEJOIN", cepConfigLiveArchiveJoin);
+            "LIVEARCHIVEJOIN_" + this.hashCode(), cepConfigLiveArchiveJoin);
       cepConfigLiveArchiveJoin.addEventType("LINKWEATHERANDTRAFFIC",
             LinkTrafficAndWeather.class.getName());
       cepRTLiveArchiveJoin = cepLiveArchiveJoin.getEPRuntime();
@@ -33,6 +43,10 @@ public class LiveArchiveJoiner {
       cepStatement = cepAdmLiveArchiveJoin.createEPL(EPLQueryRetrieve
             .getHelperInstance().getLiveArchiveCombineQuery(dbLoadRate));
       cepStatement.setSubscriber(FinalSubscriber.getFinalSubscriberInstance());
+
+      Thread thread = new Thread(new SendtoNextOperator());
+      thread.setDaemon(true);
+      thread.start();
 
    }
 
@@ -47,9 +61,9 @@ public class LiveArchiveJoiner {
     * @param trafficTime
     * @param queryEvaltime
     */
-   public void update(long linkId, double speed, double volume,
-         double temperature, double rain, Timestamp weatherTime,
-         Timestamp trafficTime, long queryEvaltime) {
+   public void update(Long linkId, Double speed, Double volume,
+         Double temperature, Double rain, Timestamp weatherTime,
+         Timestamp trafficTime, Long queryEvaltime) {
       LinkTrafficAndWeather reading = new LinkTrafficAndWeather();
       reading.setEvaltime(queryEvaltime);
       reading.setLinkId(linkId);
@@ -58,7 +72,12 @@ public class LiveArchiveJoiner {
       reading.setTemperature(temperature);
       reading.setTrafficTime(trafficTime);
       reading.setWeatherTime(weatherTime);
-      cepRTLiveArchiveJoin.sendEvent(reading);
+      queue.add(reading);
+      count++;
+      if (count % 1000 == 0) {
+         LOGGER.info(linkId + " " + rain + "<-->" + speed + " at "
+               + weatherTime + "<-->" + trafficTime);
+      }
 
    }
 
@@ -68,6 +87,20 @@ public class LiveArchiveJoiner {
     */
    public EPRuntime getEsperRunTime() {
       return cepRTLiveArchiveJoin;
+   }
+
+   private class SendtoNextOperator implements Runnable {
+
+      public void run() {
+         while (true) {
+            while (!queue.isEmpty()) {
+               cepRTLiveArchiveJoin.sendEvent(queue.poll());
+            }
+
+         }
+
+      }
+
    }
 
 }
