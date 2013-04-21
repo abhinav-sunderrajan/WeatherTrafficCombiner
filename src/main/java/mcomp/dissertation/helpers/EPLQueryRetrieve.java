@@ -53,16 +53,21 @@ public class EPLQueryRetrieve {
    }
 
    /**
-    * This must work I am will wait for 500 more messages before time out while
-    * calculating the average.
+    * Wait for 500 more messages before time out while calculating the average.
     * @param dbLoadRate
     * @param archiveStreamRate
     * @return query to aggregate archive streams with similar rain.
     */
    public String getAggregationQuery(long dbLoadRate, int archiveStreamRate) {
       String aggregationQuery;
+      long reclaimFrequency = dbLoadRate * 2;
+      if (dbLoadRate < 60) {
+         dbLoadRate = 60;
+      }
       aggregationQuery = "@Hint('reclaim_group_aged="
-            + dbLoadRate
+            + (2 * dbLoadRate)
+            + ", reclaim_group_freq="
+            + reclaimFrequency
             + "') select count (*) as countrec, linkId,avg(volume) as avgVolume, avg(speed) as avgSpeed,avg(rain) as avgRain, "
             + "avg(temperature) as avgtemp,trafficTime.`minutes` as minsTraffic,weatherTime.`minutes` as minsWeather "
             + ",trafficTime.`hours` as hrs from mcomp.dissertation.beans.LinkTrafficAndWeather"

@@ -53,6 +53,7 @@ public class LiveArchiveCombiner {
    private static long dbLoadRate;
    private static Properties configProperties;
    private static int numberOfArchiveStreams;
+   private static int numberOfAggregatorsPerFilter;
    private static Object monitor;
    private static SAXReader reader;
    private static final String CONFIG_FILE_PATH = "src/main/resources/config.properties";
@@ -81,6 +82,9 @@ public class LiveArchiveCombiner {
                .newScheduledThreadPool(3 * numberOfArchiveStreams);
          streamRate = new AtomicInteger(Integer.parseInt(configProperties
                .getProperty("live.stream.rate.in.microsecs")));
+
+         numberOfAggregatorsPerFilter = Integer.parseInt(configProperties
+               .getProperty("number.of.aggregateoperators"));
 
          // Create and instantiate an array of subscribers which join the live
          // stream with the relevant and aggregated archive stream.
@@ -237,7 +241,7 @@ public class LiveArchiveCombiner {
       FilteredByRain[] filterSubscribers = new FilteredByRain[filters.length];
       for (int filterCount = 0; filterCount < filters.length; filterCount++) {
          filterSubscribers[filterCount] = new FilteredByRain(
-               createEsperEngineIntanceForRainFilter(filterCount),
+               createEsperEngineIntanceForAggregation(filterCount),
                new ConcurrentLinkedQueue<LinkTrafficAndWeather>());
       }
 
@@ -279,6 +283,12 @@ public class LiveArchiveCombiner {
       }
    }
 
+   /**
+    * 
+    * @param id
+    * @return EPRuntime for joining the aggregated archive sub-streams and live
+    * stream.
+    */
    private EPRuntime createEsperEngineIntanceForLiveArchiveJoin(int id) {
 
       Configuration cepConfigLiveArchiveJoin = new Configuration();
@@ -303,27 +313,45 @@ public class LiveArchiveCombiner {
 
    }
 
-   private EPRuntime createEsperEngineIntanceForRainFilter(int id) {
+   /**
+    * Returns an array for aggregators per filter. This is necessary as always
+    * since the aggregator operator has always been a bottle neck for high rate
+    * data streams.
+    * @param id
+    * @return cepRTAggregateArray
+    */
+   private EPRuntime[] createEsperEngineIntanceForAggregation(int id) {
 
       Configuration cepConfigAggregate = new Configuration();
       cepConfigAggregate.getEngineDefaults().getThreading()
             .setListenerDispatchPreserveOrder(false);
-      EPServiceProvider cepAggregate = EPServiceProviderManager.getProvider(
-            "RAIN_CATEGORY_" + id, cepConfigAggregate);
       cepConfigAggregate.addEventType("LINKWEATHERANDTRAFFIC",
             LinkTrafficAndWeather.class.getName());
 
-      EPRuntime cepRTAggregate = cepAggregate.getEPRuntime();
-      EPAdministrator cepAdmAggregate = cepAggregate.getEPAdministrator();
-      EPStatement cepStatement = cepAdmAggregate.createEPL(EPLQueryRetrieve
-            .getHelperInstance().getAggregationQuery(
-                  dbLoadRate,
-                  (int) (streamRate.get() * Float.parseFloat(configProperties
-                        .getProperty("archive.stream.rate.param")))));
-      cepStatement.setSubscriber(new AggregateSubscriber(joiners[id]
-            .getEsperRunTime(),
-            new ConcurrentLinkedQueue<AggregatesPerLinkID>()));
-      return cepRTAggregate;
+      EPServiceProvider[] cepAggregateArray = new EPServiceProvider[numberOfAggregatorsPerFilter];
+      EPRuntime[] cepRTAggregateArray = new EPRuntime[numberOfAggregatorsPerFilter];
+      EPAdministrator[] cepAdmAggregateArray = new EPAdministrator[numberOfAggregatorsPerFilter];
+
+      for (int count = 0; count < numberOfAggregatorsPerFilter; count++) {
+         cepAggregateArray[count] = EPServiceProviderManager.getProvider(
+               "RAIN_CATEGORY_AGGREGATOR_" + id + "_" + count,
+               cepConfigAggregate);
+         cepRTAggregateArray[count] = cepAggregateArray[count].getEPRuntime();
+         cepAdmAggregateArray[count] = cepAggregateArray[count]
+               .getEPAdministrator();
+         EPStatement cepStatement = cepAdmAggregateArray[count]
+               .createEPL(EPLQueryRetrieve
+                     .getHelperInstance()
+                     .getAggregationQuery(
+                           dbLoadRate,
+                           (int) (streamRate.get() * Float.parseFloat(configProperties
+                                 .getProperty("archive.stream.rate.param")))));
+         cepStatement.setSubscriber(new AggregateSubscriber(joiners[id]
+               .getEsperRunTime(),
+               new ConcurrentLinkedQueue<AggregatesPerLinkID>()));
+      }
+
+      return cepRTAggregateArray;
 
    }
 }
