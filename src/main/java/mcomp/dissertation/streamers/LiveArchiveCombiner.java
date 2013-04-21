@@ -16,11 +16,14 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import mcomp.dissertation.beans.AggregatesPerLinkID;
 import mcomp.dissertation.beans.LinkTrafficAndWeather;
 import mcomp.dissertation.beans.LiveTrafficBean;
 import mcomp.dissertation.beans.LiveWeatherBean;
 import mcomp.dissertation.helpers.EPLQueryRetrieve;
+import mcomp.dissertation.subscribers.AggregateSubscriber;
 import mcomp.dissertation.subscribers.FilteredByRain;
+import mcomp.dissertation.subscribers.FinalSubscriber;
 import mcomp.dissertation.subscribers.LiveArchiveJoiner;
 
 import org.apache.log4j.Logger;
@@ -68,7 +71,7 @@ public class LiveArchiveCombiner {
    private LiveArchiveCombiner(final String configFilePath,
          final String connectionFilePath) {
       try {
-
+         LOGGER.info("Initializing all parameters");
          connectionProperties = new Properties();
          configProperties = new Properties();
          configProperties.load(new FileInputStream(configFilePath));
@@ -83,7 +86,9 @@ public class LiveArchiveCombiner {
          // stream with the relevant and aggregated archive stream.
          joiners = new LiveArchiveJoiner[NUMBER_OF_CATEGORIES];
          for (int count = 0; count < NUMBER_OF_CATEGORIES; count++) {
-            joiners[count] = new LiveArchiveJoiner(dbLoadRate);
+            joiners[count] = new LiveArchiveJoiner(
+                  createEsperEngineIntanceForLiveArchiveJoin(count),
+                  new ConcurrentLinkedQueue<LinkTrafficAndWeather>());
          }
 
          reader = new SAXReader();
@@ -109,6 +114,13 @@ public class LiveArchiveCombiner {
                .getEPAdministrator();
          EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
          String[] filters = helper.getFilterArrayForLiveJoin(dbLoadRate);
+         cepAdmLiveTrafficWeatherJoin.getConfiguration().addVariable("cti",
+               Long.class, 0);
+         cepAdmLiveTrafficWeatherJoin.getConfiguration().addVariable(
+               "trafficTimeMillis", Long.class, 0);
+         cepAdmLiveTrafficWeatherJoin
+               .createEPL("on mcomp.dissertation.beans.LiveTrafficBean as traffic set cti = traffic.linkId "
+                     + ",trafficTimeMillis=traffic.timeStamp.time");
          for (int count = 0; count < filters.length; count++) {
             EPStatement cepStatement = cepAdmLiveTrafficWeatherJoin
                   .createEPL(filters[count]);
@@ -225,9 +237,8 @@ public class LiveArchiveCombiner {
       FilteredByRain[] filterSubscribers = new FilteredByRain[filters.length];
       for (int filterCount = 0; filterCount < filters.length; filterCount++) {
          filterSubscribers[filterCount] = new FilteredByRain(
-               joiners[filterCount], dbLoadRate,
-               (int) (streamRate.get() * Float.parseFloat(configProperties
-                     .getProperty("archive.stream.rate.param"))));
+               createEsperEngineIntanceForRainFilter(filterCount),
+               new ConcurrentLinkedQueue<LinkTrafficAndWeather>());
       }
 
       for (int count = 0; count < numberOfArchiveStreams; count++) {
@@ -266,5 +277,53 @@ public class LiveArchiveCombiner {
          // Start the next archive stream for the records exactly a day after
          startTime = startTime + 24 * 3600 * 1000;
       }
+   }
+
+   private EPRuntime createEsperEngineIntanceForLiveArchiveJoin(int id) {
+
+      Configuration cepConfigLiveArchiveJoin = new Configuration();
+      cepConfigLiveArchiveJoin.getEngineDefaults().getThreading()
+            .setListenerDispatchPreserveOrder(false);
+      EPServiceProvider cepLiveArchiveJoin = EPServiceProviderManager
+            .getProvider("LIVEARCHIVEJOIN_" + id, cepConfigLiveArchiveJoin);
+      cepConfigLiveArchiveJoin.addEventType("LINKWEATHERANDTRAFFIC",
+            LinkTrafficAndWeather.class.getName());
+      cepConfigLiveArchiveJoin.addEventType("AGGREGATESPERLINKID",
+            AggregatesPerLinkID.class.getName());
+
+      EPRuntime cepRTLiveArchiveJoin = cepLiveArchiveJoin.getEPRuntime();
+      EPAdministrator cepAdmLiveArchiveJoin = cepLiveArchiveJoin
+            .getEPAdministrator();
+      EPLQueryRetrieve.getHelperInstance();
+      EPStatement cepStatement = cepAdmLiveArchiveJoin
+            .createEPL(EPLQueryRetrieve.getHelperInstance()
+                  .getLiveArchiveCombineQuery(dbLoadRate));
+      cepStatement.setSubscriber(FinalSubscriber.getFinalSubscriberInstance());
+      return cepRTLiveArchiveJoin;
+
+   }
+
+   private EPRuntime createEsperEngineIntanceForRainFilter(int id) {
+
+      Configuration cepConfigAggregate = new Configuration();
+      cepConfigAggregate.getEngineDefaults().getThreading()
+            .setListenerDispatchPreserveOrder(false);
+      EPServiceProvider cepAggregate = EPServiceProviderManager.getProvider(
+            "RAIN_CATEGORY_" + id, cepConfigAggregate);
+      cepConfigAggregate.addEventType("LINKWEATHERANDTRAFFIC",
+            LinkTrafficAndWeather.class.getName());
+
+      EPRuntime cepRTAggregate = cepAggregate.getEPRuntime();
+      EPAdministrator cepAdmAggregate = cepAggregate.getEPAdministrator();
+      EPStatement cepStatement = cepAdmAggregate.createEPL(EPLQueryRetrieve
+            .getHelperInstance().getAggregationQuery(
+                  dbLoadRate,
+                  (int) (streamRate.get() * Float.parseFloat(configProperties
+                        .getProperty("archive.stream.rate.param")))));
+      cepStatement.setSubscriber(new AggregateSubscriber(joiners[id]
+            .getEsperRunTime(),
+            new ConcurrentLinkedQueue<AggregatesPerLinkID>()));
+      return cepRTAggregate;
+
    }
 }

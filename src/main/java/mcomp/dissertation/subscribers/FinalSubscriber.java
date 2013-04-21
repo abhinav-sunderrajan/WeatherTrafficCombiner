@@ -14,6 +14,12 @@ import org.apache.log4j.Logger;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 
+/**
+ * 
+ * The final (hence not Extending {@link IntermediateSubscriber}) subscriber
+ * which sends the data to the browser as JSON strings.
+ * 
+ */
 public class FinalSubscriber {
 
    private static FinalSubscriber subscriber;

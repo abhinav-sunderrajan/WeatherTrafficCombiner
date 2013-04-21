@@ -32,21 +32,15 @@ public class EPLQueryRetrieve {
 
    public String[] getFilterArrayForLiveJoin(long dbLoadRate) {
 
-      String basic = "@Hint('reclaim_group_aged= "
-            + dbLoadRate
-            + "') select traffic.linkId as linkId,traffic.speed,traffic.volume,weather.temperature,weather.rain as rain, "
+      String basic = "select traffic.linkId as linkId,traffic.speed,traffic.volume,weather.temperature,weather.rain as rain, "
             + "weather.timeStamp as weatherTime, traffic.timeStamp as trafficTime,current_timestamp from mcomp.dissertation.beans.LiveTrafficBean"
-            + " as traffic unidirectional inner join mcomp.dissertation.beans.LiveWeatherBean.std:unique(linkId,timeStamp.`hours`,timeStamp.`minutes`)"
-            + " as weather on  traffic.linkId=weather.linkId  where traffic.timeStamp.`hours`=weather.timeStamp.`hours` and ";
-      String[] filterArray = {
-            basic
-                  + "weather.rain<2 and weather.timeStamp.`minutes`=(traffic.timeStamp.`minutes`-(traffic.timeStamp.`minutes`%30)) ",
-            basic
-                  + "(weather.rain between 3 and 5) and weather.timeStamp.`minutes`=(traffic.timeStamp.`minutes`-(traffic.timeStamp.`minutes`%30)) ",
-            basic
-                  + "(weather.rain between 6 and 8) and weather.timeStamp.`minutes`=(traffic.timeStamp.`minutes`-(traffic.timeStamp.`minutes`%30)) ",
-            basic
-                  + "weather.rain>8 and weather.timeStamp.`minutes`=(traffic.timeStamp.`minutes`-(traffic.timeStamp.`minutes`%30)) " };
+            + " as traffic unidirectional left outer join mcomp.dissertation.beans.LiveWeatherBean"
+            + ".win:expr(cti!=999999999 AND trafficTimeMillis!=(timeStamp.time + 30*60*1000)) as weather "
+            + "on  traffic.linkId=weather.linkId  and traffic.timeStamp.`hours`=weather.timeStamp.`hours`"
+            + " where weather.timeStamp.`minutes`=(traffic.timeStamp.`minutes`-(traffic.timeStamp.`minutes`%30)) and ";
+      String[] filterArray = { basic + "weather.rain<2",
+            basic + "(weather.rain between 3 and 5)",
+            basic + "(weather.rain between 6 and 8)", basic + "weather.rain>8" };
       return filterArray;
    }
 
@@ -62,10 +56,10 @@ public class EPLQueryRetrieve {
     * This must work I am will wait for 500 more messages before time out while
     * calculating the average.
     * @param dbLoadRate
-    * @param aggregationQueryParm
+    * @param archiveStreamRate
     * @return query to aggregate archive streams with similar rain.
     */
-   public String getAggregationQuery(long dbLoadRate, int streamRate) {
+   public String getAggregationQuery(long dbLoadRate, int archiveStreamRate) {
       String aggregationQuery;
       aggregationQuery = "@Hint('reclaim_group_aged="
             + dbLoadRate
@@ -73,8 +67,8 @@ public class EPLQueryRetrieve {
             + "avg(temperature) as avgtemp,trafficTime.`minutes` as minsTraffic,weatherTime.`minutes` as minsWeather "
             + ",trafficTime.`hours` as hrs from mcomp.dissertation.beans.LinkTrafficAndWeather"
             + ".std:groupwin(linkId,trafficTime.`minutes`,trafficTime.`hours`).win:time_batch("
-            + (streamRate / 2)
-            + " milliseconds) group by linkId,trafficTime.`minutes`,trafficTime.`hours`";
+            + (archiveStreamRate / 3)
+            + " msec) group by linkId,trafficTime.`minutes`,trafficTime.`hours`";
       return aggregationQuery;
 
    }

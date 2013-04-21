@@ -46,6 +46,7 @@ public class DBConnect {
                   password);
             LOGGER.info("Connected to "
                   + connectionProperties.getProperty("database.vendor"));
+            Runtime.getRuntime().addShutdownHook(new Hook());
 
          } catch (Exception e) {
             LOGGER.error(
@@ -80,5 +81,23 @@ public class DBConnect {
 
       }
       return rs;
+   }
+
+   /**
+    * 
+    * Close the database connections that have been opened before terminating
+    * program.
+    * 
+    */
+   private class Hook extends Thread {
+
+      public void run() {
+         try {
+            LOGGER.info("Closing the JDBC connection before shut down..");
+            connect.close();
+         } catch (SQLException e) {
+            LOGGER.error("Error closing the JDBC connections..", e);
+         }
+      }
    }
 }
