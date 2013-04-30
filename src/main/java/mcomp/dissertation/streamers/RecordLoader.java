@@ -4,11 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mcomp.dissertation.beans.LinkTrafficAndWeather;
 
 import org.apache.log4j.Logger;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * This class is responsible for loading an optimal number of records to the
@@ -17,6 +23,10 @@ import org.apache.log4j.Logger;
 public class RecordLoader<T> extends AbstractLoader<T> {
    private Timestamp startTime;
    private boolean wakeFlag;
+   private ConcurrentHashMap<Long, Coordinate> linkIdCoord;
+   private Polygon polygon;
+   private GeometryFactory gf;
+   private boolean partionByLinkId;
    private static final Logger LOGGER = Logger.getLogger(RecordLoader.class);
 
    /**
@@ -25,12 +35,22 @@ public class RecordLoader<T> extends AbstractLoader<T> {
     * @param startTime
     * @param connectionProperties
     * @param monitor
+    * @param linkIdCoord
+    * @param polygon
+    * @param gf
+    * @param partionByLinkId
     */
    public RecordLoader(final ConcurrentLinkedQueue<T> buffer,
          final long startTime, final Properties connectionProperties,
-         final Object monitor) {
+         final Object monitor,
+         final ConcurrentHashMap<Long, Coordinate> linkIdCoord,
+         final Polygon polygon, GeometryFactory gf, boolean partionByLinkId) {
       super(buffer, connectionProperties, monitor);
       this.startTime = new Timestamp(startTime);
+      this.linkIdCoord = linkIdCoord;
+      this.polygon = polygon;
+      this.gf = gf;
+      this.partionByLinkId = partionByLinkId;
       wakeFlag = true;
 
    }
@@ -38,17 +58,27 @@ public class RecordLoader<T> extends AbstractLoader<T> {
    @SuppressWarnings("unchecked")
    public void run() {
       try {
-         ResultSet rs = dbconnect.retrieveAtTimeStamp(startTime);
+         ResultSet rs = dbconnect.retrieveAtTimeStamp(startTime,
+               partionByLinkId);
+         Coordinate coord;
+         Point point;
+         long linkid;
          while (rs.next()) {
-            LinkTrafficAndWeather bean = new LinkTrafficAndWeather();
-            bean.setLinkId(rs.getLong(1));
-            bean.setSpeed(rs.getFloat(2));
-            bean.setVolume(rs.getInt(3));
-            bean.setTemperature(rs.getDouble(4));
-            bean.setRain(rs.getDouble(5));
-            bean.setTrafficTime(rs.getTimestamp(6));
-            bean.setWeatherTime(rs.getTimestamp(7));
-            getBuffer().add((T) bean);
+            linkid = rs.getLong(1);
+            coord = linkIdCoord.get(linkid);
+            point = gf.createPoint(coord);
+            if (polygon.contains(point)) {
+               LinkTrafficAndWeather bean = new LinkTrafficAndWeather();
+               bean.setLinkId(rs.getLong(1));
+               bean.setSpeed(rs.getFloat(2));
+               bean.setVolume(rs.getInt(3));
+               bean.setTemperature(rs.getDouble(4));
+               bean.setRain(rs.getDouble(5));
+               bean.setTrafficTime(rs.getTimestamp(6));
+               bean.setWeatherTime(rs.getTimestamp(7));
+               getBuffer().add((T) bean);
+            }
+
          }
 
          if (wakeFlag) {

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Properties;
 
+import mcomp.dissertation.helpers.CommonHelper;
+
 import org.apache.log4j.Logger;
 
 import com.mysql.jdbc.Connection;
@@ -17,7 +19,13 @@ import com.mysql.jdbc.PreparedStatement;
 public class DBConnect {
 
    private Connection connect = null;
+   private CommonHelper helper;
    private static final Logger LOGGER = Logger.getLogger(DBConnect.class);
+   private boolean isEven;
+
+   public DBConnect() {
+      this.helper = CommonHelper.getHelperInstance();
+   }
 
    /**
     * 
@@ -59,19 +67,22 @@ public class DBConnect {
 
    /**
     * @param start
+    * @param partitionByLinkId
     * @return ResultSet
     * @throws SQLException
     */
-   public ResultSet retrieveAtTimeStamp(final Timestamp start)
-         throws SQLException {
-      String SELECT_QUERY = "SELECT traffic.linkid,traffic.speed,traffic.volume,weather.temperature,weather.rain "
-            + ",traffic.time_stamp,weather.time_stamp FROM dataarchive AS traffic INNER JOIN linkweather AS "
-            + "weather ON traffic.time_stamp=?AND traffic.linkid=weather.linkid AND (traffic.time_stamp-INTERVAL "
-            + (start.getMinutes() % 30) + " MINUTE)=weather.time_stamp";
+   @SuppressWarnings("deprecation")
+   public ResultSet retrieveAtTimeStamp(final Timestamp start,
+         boolean partitionByLinkId) throws SQLException {
+
+      if (start.getMinutes() < 30) {
+         isEven = true;
+      } else {
+         isEven = false;
+      }
       ResultSet rs = null;
-      PreparedStatement preparedStatement = (PreparedStatement) connect
-            .prepareStatement(SELECT_QUERY);
-      preparedStatement.setFetchSize(Integer.MIN_VALUE);
+      PreparedStatement preparedStatement = helper.getDBAggregationQuery(
+            partitionByLinkId, start, isEven, connect);
       try {
          preparedStatement.setTimestamp(1, start);
          rs = preparedStatement.executeQuery();

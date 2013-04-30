@@ -1,14 +1,20 @@
 package mcomp.dissertation.streamers;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,10 +26,12 @@ import mcomp.dissertation.beans.AggregatesPerLinkID;
 import mcomp.dissertation.beans.LinkTrafficAndWeather;
 import mcomp.dissertation.beans.LiveTrafficBean;
 import mcomp.dissertation.beans.LiveWeatherBean;
-import mcomp.dissertation.helpers.EPLQueryRetrieve;
+import mcomp.dissertation.helpers.CommonHelper;
 import mcomp.dissertation.subscribers.AggregateSubscriber;
 import mcomp.dissertation.subscribers.FilteredByRain;
 import mcomp.dissertation.subscribers.FinalSubscriber;
+import mcomp.dissertation.subscribers.LinkIdTrafficFilter;
+import mcomp.dissertation.subscribers.LinkIdWeatherFilter;
 import mcomp.dissertation.subscribers.LiveArchiveJoiner;
 
 import org.apache.log4j.Logger;
@@ -38,14 +46,24 @@ import com.espertech.esper.client.EPRuntime;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.EPSubscriberException;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.io.WKTReader;
 
 public class LiveArchiveCombiner {
    private long startTime;
    private EPServiceProvider cepLiveTrafficWeatherJoin;
    private EPAdministrator cepAdmLiveTrafficWeatherJoin;
    private Configuration cepConfigLiveTrafficWeatherJoin;
-   private EPRuntime cepRTLiveTrafficWeatherJoin;
    private LiveArchiveJoiner[] joiners;
+   private File file;
+   private EPRuntime cepRTLiveTrafficWeatherJoin;
+   private BufferedReader br;
+   private static ConcurrentHashMap<Long, Coordinate> linkIdCoord;
+   private static Polygon polygon;
+   private static boolean partionByLinkId;
    private static ScheduledExecutorService executor;
    private static Properties connectionProperties;
    private static DateFormat df;
@@ -63,6 +81,7 @@ public class LiveArchiveCombiner {
    private static final int NUMBER_OF_CATEGORIES = 4;
    private static final Logger LOGGER = Logger
          .getLogger(LiveArchiveCombiner.class);
+   private static final GeometryFactory gf = new GeometryFactory();;
 
    /**
     * @param configFilePath
@@ -86,15 +105,6 @@ public class LiveArchiveCombiner {
          numberOfAggregatorsPerFilter = Integer.parseInt(configProperties
                .getProperty("number.of.aggregateoperators"));
 
-         // Create and instantiate an array of subscribers which join the live
-         // stream with the relevant and aggregated archive stream.
-         joiners = new LiveArchiveJoiner[NUMBER_OF_CATEGORIES];
-         for (int count = 0; count < NUMBER_OF_CATEGORIES; count++) {
-            joiners[count] = new LiveArchiveJoiner(
-                  createEsperEngineIntanceForLiveArchiveJoin(count),
-                  new ConcurrentLinkedQueue<LinkTrafficAndWeather>());
-         }
-
          reader = new SAXReader();
          dbLoadRate = (long) (streamRate.get() * Float
                .parseFloat(configProperties.getProperty("db.prefetch.rate")));
@@ -102,8 +112,36 @@ public class LiveArchiveCombiner {
          startTime = df.parse(
                configProperties.getProperty("archive.stream.start.time"))
                .getTime();
+         partionByLinkId = Boolean.parseBoolean(configProperties
+               .getProperty("partition.by.linkid"));
 
-         // Instantiate the Esper parameter arrays
+         CommonHelper helper = CommonHelper.getHelperInstance();
+
+         // Link Id co=ordinate settings.
+         LOGGER.info("Loading link ID coordinate information to memory");
+         file = new File(configProperties.getProperty("linkid.cordinate.file"));
+         br = new BufferedReader(new FileReader(file));
+         linkIdCoord = new ConcurrentHashMap<Long, Coordinate>();
+         helper.loadLinkIdCoordinates(linkIdCoord, file, br);
+         LOGGER.info("Finished loading link ID coordinate information for "
+               + linkIdCoord.size() + " link Ids to memory");
+
+         // Create the polygon for spatial filter
+         WKTReader reader = new WKTReader(gf);
+         polygon = (Polygon) reader.read(configProperties
+               .getProperty("spatial.polygon"));
+
+         // Create and instantiate an array of subscribers which join the live
+         // stream with the relevant and aggregated archive stream.
+         joiners = new LiveArchiveJoiner[NUMBER_OF_CATEGORIES];
+         for (int count = 0; count < NUMBER_OF_CATEGORIES; count++) {
+            joiners[count] = new LiveArchiveJoiner(
+                  createEsperEngineIntanceForLiveArchiveJoin(count),
+                  new ConcurrentLinkedQueue<LinkTrafficAndWeather>(),
+                  linkIdCoord);
+         }
+
+         // Instantiate the Esper parameters
          cepConfigLiveTrafficWeatherJoin = new Configuration();
          cepConfigLiveTrafficWeatherJoin.getEngineDefaults().getThreading()
                .setListenerDispatchPreserveOrder(false);
@@ -116,7 +154,6 @@ public class LiveArchiveCombiner {
          cepRTLiveTrafficWeatherJoin = cepLiveTrafficWeatherJoin.getEPRuntime();
          cepAdmLiveTrafficWeatherJoin = cepLiveTrafficWeatherJoin
                .getEPAdministrator();
-         EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
          String[] filters = helper.getFilterArrayForLiveJoin(dbLoadRate);
          cepAdmLiveTrafficWeatherJoin.getConfiguration().addVariable("cti",
                Long.class, 0);
@@ -143,6 +180,9 @@ public class LiveArchiveCombiner {
                e);
       } catch (IOException e) {
          LOGGER.error("Properties file contains non unicode values ", e);
+      } catch (com.vividsolutions.jts.io.ParseException e) {
+         LOGGER.error(
+               "Error parsing the polygon string used for spatial filtering", e);
       }
 
    }
@@ -192,17 +232,83 @@ public class LiveArchiveCombiner {
             int serverPort = Integer.parseInt(stream.attribute(1).getText());
             String streamName = stream.attribute(0).getText();
             if (streamName.equalsIgnoreCase("traffic")) {
+               EPRuntime cepRTLinkFilter = null;
+               if (partionByLinkId) {
+                  Configuration cepConfigLinkFilter = new Configuration();
+                  cepConfigLinkFilter.getEngineDefaults().getThreading()
+                        .setListenerDispatchPreserveOrder(false);
+                  EPServiceProvider cepLinkFilter = EPServiceProviderManager
+                        .getProvider("FILTER_TRAFFIC_BY_LINKID",
+                              cepConfigLinkFilter);
+                  cepConfigLinkFilter.addEventType("TRAFFICBEAN",
+                        LiveTrafficBean.class.getName());
+                  cepRTLinkFilter = cepLinkFilter.getEPRuntime();
+                  EPAdministrator cepAdmLinkFilter = cepLinkFilter
+                        .getEPAdministrator();
+                  EPStatement cepStatement = cepAdmLinkFilter
+                        .createEPL("select * from mcomp.dissertation.beans.LiveTrafficBean as traffic "
+                              + " where traffic.linkId%2=cast(traffic.timeStamp.`minutes`/30,int)");
+                  cepStatement.setSubscriber(new LinkIdTrafficFilter(
+                        new ConcurrentLinkedQueue<LiveTrafficBean>(),
+                        core.cepRTLiveTrafficWeatherJoin));
+
+               }
+
                ConcurrentLinkedQueue<LiveTrafficBean> buffer = new ConcurrentLinkedQueue<LiveTrafficBean>();
                GenericLiveStreamer<LiveTrafficBean> streamer = new GenericLiveStreamer<LiveTrafficBean>(
-                     buffer, core.cepRTLiveTrafficWeatherJoin, monitor,
-                     executor, streamRate, df, serverPort);
+                     buffer,
+                     core.cepRTLiveTrafficWeatherJoin,
+                     monitor,
+                     executor,
+                     streamRate,
+                     df,
+                     serverPort,
+                     gf,
+                     polygon,
+                     linkIdCoord,
+                     partionByLinkId,
+                     "Ingestion rate in number of messages per second for traffic stream",
+                     cepRTLinkFilter);
                streamer.startStreaming();
 
             } else {
+               EPRuntime cepRTLinkFilter = null;
+               if (partionByLinkId) {
+                  Configuration cepConfigLinkFilter = new Configuration();
+                  cepConfigLinkFilter.getEngineDefaults().getThreading()
+                        .setListenerDispatchPreserveOrder(false);
+                  EPServiceProvider cepLinkFilter = EPServiceProviderManager
+                        .getProvider("FILTER_WEATHER_BY_LINKID",
+                              cepConfigLinkFilter);
+                  cepConfigLinkFilter.addEventType("WEATHERBEAN",
+                        LiveWeatherBean.class.getName());
+                  cepRTLinkFilter = cepLinkFilter.getEPRuntime();
+                  EPAdministrator cepAdmLinkFilter = cepLinkFilter
+                        .getEPAdministrator();
+                  EPStatement cepStatement = cepAdmLinkFilter
+                        .createEPL("select * from mcomp.dissertation.beans.LiveWeatherBean as weather "
+                              + " where weather.linkId%2=cast(weather.timeStamp.`minutes`/30,int)");
+                  cepStatement.setSubscriber(new LinkIdWeatherFilter(
+                        new ConcurrentLinkedQueue<LiveWeatherBean>(),
+                        core.cepRTLiveTrafficWeatherJoin));
+
+               }
+
                ConcurrentLinkedQueue<LiveWeatherBean> buffer = new ConcurrentLinkedQueue<LiveWeatherBean>();
                GenericLiveStreamer<LiveWeatherBean> streamer = new GenericLiveStreamer<LiveWeatherBean>(
-                     buffer, core.cepRTLiveTrafficWeatherJoin, monitor,
-                     executor, streamRate, df, serverPort);
+                     buffer,
+                     core.cepRTLiveTrafficWeatherJoin,
+                     monitor,
+                     executor,
+                     streamRate,
+                     df,
+                     serverPort,
+                     gf,
+                     polygon,
+                     linkIdCoord,
+                     partionByLinkId,
+                     "Ingestion rate in number of messages per second for weather stream",
+                     cepRTLinkFilter);
                streamer.startStreaming();
 
             }
@@ -236,7 +342,7 @@ public class LiveArchiveCombiner {
       EPAdministrator[] cepAdmFilterArray = new EPAdministrator[numberOfArchiveStreams];
       ConcurrentLinkedQueue<LinkTrafficAndWeather>[] buffer = new ConcurrentLinkedQueue[numberOfArchiveStreams];
 
-      EPLQueryRetrieve helper = EPLQueryRetrieve.getHelperInstance();
+      CommonHelper helper = CommonHelper.getHelperInstance();
       String[] filters = helper.getFilterArrayForArchive();
       FilteredByRain[] filterSubscribers = new FilteredByRain[filters.length];
       for (int filterCount = 0; filterCount < filters.length; filterCount++) {
@@ -271,7 +377,8 @@ public class LiveArchiveCombiner {
          archiveStreamFutures[count] = streamers[count].startStreaming();
 
          loaders[count] = new RecordLoader<LinkTrafficAndWeather>(
-               buffer[count], startTime, connectionProperties, monitor);
+               buffer[count], startTime, connectionProperties, monitor,
+               linkIdCoord, polygon, gf, partionByLinkId);
 
          // retrieve records from the database for roughly every 30,000 records
          // from the live stream. This really depends upon the nature of the
@@ -288,8 +395,13 @@ public class LiveArchiveCombiner {
     * @param id
     * @return EPRuntime for joining the aggregated archive sub-streams and live
     * stream.
+    * @throws UnknownHostException
+    * @throws NumberFormatException
+    * @throws EPSubscriberException
     */
-   private EPRuntime createEsperEngineIntanceForLiveArchiveJoin(int id) {
+   private EPRuntime createEsperEngineIntanceForLiveArchiveJoin(int id)
+         throws EPSubscriberException, NumberFormatException,
+         UnknownHostException {
 
       Configuration cepConfigLiveArchiveJoin = new Configuration();
       cepConfigLiveArchiveJoin.getEngineDefaults().getThreading()
@@ -304,11 +416,12 @@ public class LiveArchiveCombiner {
       EPRuntime cepRTLiveArchiveJoin = cepLiveArchiveJoin.getEPRuntime();
       EPAdministrator cepAdmLiveArchiveJoin = cepLiveArchiveJoin
             .getEPAdministrator();
-      EPLQueryRetrieve.getHelperInstance();
-      EPStatement cepStatement = cepAdmLiveArchiveJoin
-            .createEPL(EPLQueryRetrieve.getHelperInstance()
-                  .getLiveArchiveCombineQuery(dbLoadRate));
-      cepStatement.setSubscriber(FinalSubscriber.getFinalSubscriberInstance());
+      CommonHelper.getHelperInstance();
+      EPStatement cepStatement = cepAdmLiveArchiveJoin.createEPL(CommonHelper
+            .getHelperInstance().getLiveArchiveCombineQuery(dbLoadRate));
+      cepStatement.setSubscriber(FinalSubscriber
+            .getFinalSubscriberInstance(new InetSocketAddress(Integer
+                  .parseInt(configProperties.getProperty("susbcriber.port")))));
       return cepRTLiveArchiveJoin;
 
    }
@@ -340,11 +453,10 @@ public class LiveArchiveCombiner {
          cepAdmAggregateArray[count] = cepAggregateArray[count]
                .getEPAdministrator();
          EPStatement cepStatement = cepAdmAggregateArray[count]
-               .createEPL(EPLQueryRetrieve
-                     .getHelperInstance()
-                     .getAggregationQuery(
-                           dbLoadRate,
-                           (int) (streamRate.get() * Float.parseFloat(configProperties
+               .createEPL(CommonHelper.getHelperInstance().getAggregationQuery(
+                     dbLoadRate,
+                     (int) (streamRate.get() * Float
+                           .parseFloat(configProperties
                                  .getProperty("archive.stream.rate.param")))));
          cepStatement.setSubscriber(new AggregateSubscriber(joiners[id]
                .getEsperRunTime(),

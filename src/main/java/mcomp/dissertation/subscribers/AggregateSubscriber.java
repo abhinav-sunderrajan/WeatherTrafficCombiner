@@ -60,7 +60,7 @@ public class AggregateSubscriber extends
          bean.setWeatherMinutes(weatherMins);
          queue.add(bean);
          count++;
-         if (count % 1000 == 0) {
+         if (count % 10000 == 0) {
             LOGGER.info(countRec + " records at " + bean.getLinkId() + " at "
                   + bean.getTrafficMinutes() + " and "
                   + bean.getWeatherMinutes());

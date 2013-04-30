@@ -2,6 +2,7 @@ package mcomp.dissertation.subscribers;
 
 import java.sql.Timestamp;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mcomp.dissertation.beans.LinkTrafficAndWeather;
@@ -9,6 +10,7 @@ import mcomp.dissertation.beans.LinkTrafficAndWeather;
 import org.apache.log4j.Logger;
 
 import com.espertech.esper.client.EPRuntime;
+import com.vividsolutions.jts.geom.Coordinate;
 
 /**
  * 
@@ -20,6 +22,7 @@ public class LiveArchiveJoiner extends
       IntermediateSubscriber<LinkTrafficAndWeather> {
    private Queue<LinkTrafficAndWeather> queue;
    private int count;
+   private ConcurrentHashMap<Long, Coordinate> linkIdCoord;
    private EPRuntime cepRTLiveArchiveJoin;
    private static final Logger LOGGER = Logger
          .getLogger(LiveArchiveJoiner.class);
@@ -28,12 +31,15 @@ public class LiveArchiveJoiner extends
     * 
     * @param cepRTLiveArchiveJoin
     * @param queue
+    * @param linkIdCoord
     */
    public LiveArchiveJoiner(final EPRuntime cepRTLiveArchiveJoin,
-         final ConcurrentLinkedQueue<LinkTrafficAndWeather> queue) {
+         final ConcurrentLinkedQueue<LinkTrafficAndWeather> queue,
+         final ConcurrentHashMap<Long, Coordinate> linkIdCoord) {
       super(queue, cepRTLiveArchiveJoin);
       this.queue = queue;
       this.cepRTLiveArchiveJoin = cepRTLiveArchiveJoin;
+      this.linkIdCoord = linkIdCoord;
 
    }
 
@@ -51,6 +57,7 @@ public class LiveArchiveJoiner extends
    public void update(Long linkId, Double speed, Double volume,
          Double temperature, Double rain, Timestamp weatherTime,
          Timestamp trafficTime, Long queryEvaltime) {
+      Coordinate coord = linkIdCoord.get(linkId);
       LinkTrafficAndWeather reading = new LinkTrafficAndWeather();
       reading.setEvaltime(queryEvaltime);
       reading.setLinkId(linkId);
@@ -59,6 +66,7 @@ public class LiveArchiveJoiner extends
       reading.setTemperature(temperature);
       reading.setTrafficTime(trafficTime);
       reading.setWeatherTime(weatherTime);
+      reading.setLinkCoordinates(coord);
       queue.add(reading);
       count++;
       if (count % 1000 == 0) {

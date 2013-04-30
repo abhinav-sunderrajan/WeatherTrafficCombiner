@@ -2,6 +2,8 @@ package mcomp.dissertation.beans;
 
 import java.sql.Timestamp;
 
+import com.vividsolutions.jts.geom.Coordinate;
+
 public class LinkTrafficAndWeather {
    private long linkId;
    private Timestamp trafficTime;
@@ -10,6 +12,8 @@ public class LinkTrafficAndWeather {
    private double temperature;
    private double speed;
    private long evaltime;
+   private double volume;
+   private Coordinate linkCoordinates;
 
    /**
     * @return the evaltime
@@ -123,6 +127,18 @@ public class LinkTrafficAndWeather {
       this.volume = volume;
    }
 
-   private double volume;
+   /**
+    * @return the linkCoordinates
+    */
+   public Coordinate getLinkCoordinates() {
+      return linkCoordinates;
+   }
+
+   /**
+    * @param linkCoordinates the linkCoordinates to set
+    */
+   public void setLinkCoordinates(Coordinate linkCoordinates) {
+      this.linkCoordinates = linkCoordinates;
+   }
 
 }
