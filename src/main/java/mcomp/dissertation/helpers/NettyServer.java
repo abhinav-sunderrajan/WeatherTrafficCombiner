@@ -1,5 +1,7 @@
 package mcomp.dissertation.helpers;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +62,7 @@ public class NettyServer<E> {
    private int count;
    private AtomicInteger streamRate;
    private int hashCode;
+   private FileWriter writeFile;
    private static final Logger LOGGER = Logger.getLogger(NettyServer.class);
 
    /**
@@ -71,41 +74,50 @@ public class NettyServer<E> {
     * @param polygon
     * @param linkIdCoord
     * @param timeSeriesTitle
+    * @param imagesaveDir
     */
    @SuppressWarnings("deprecation")
    public NettyServer(final ConcurrentLinkedQueue<E> buffer,
          final ConcurrentHashMap<Long, Coordinate> linkIdCoord,
          final Polygon polygon, final GeometryFactory gf,
          final ScheduledExecutorService executor,
-         final AtomicInteger streamRate, final String timeSeriesTitle) {
+         final AtomicInteger streamRate, final String timeSeriesTitle,
+         final String writeFileDir, final String imagesaveDir) {
 
-      factory = new NioServerSocketChannelFactory(
-            Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-      bootstrap = new ServerBootstrap(factory);
-      bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-         public ChannelPipeline getPipeline() {
-            return Channels.pipeline(
-                  new ObjectDecoder(ClassResolvers.cacheDisabled(getClass()
-                        .getClassLoader())), new ObjectEncoder(),
-                  new FirstHandshake());
-         }
-      });
-      bootstrap.setOption("child.tcpNoDelay", true);
-      bootstrap.setOption("child.keepAlive", true);
-      this.buffer = buffer;
-      this.streamRate = streamRate;
-      this.linkIdCoord = linkIdCoord;
-      this.polygon = polygon;
-      this.gf = gf;
-      this.hashCode = this.hashCode();
-      display = StreamJoinDisplay.getInstance("Join Performance Measure");
-      display.addToDataSeries(new TimeSeries(timeSeriesTitle, Minute.class),
-            hashCode);
-      valueMap = new HashMap<Integer, Double>();
-      valueMap.put(hashCode, 0.0);
-      executor.scheduleAtFixedRate(new IngestionMeasure(), 30, 30,
-            TimeUnit.SECONDS);
-      Runtime.getRuntime().addShutdownHook(new Hook());
+      try {
+         factory = new NioServerSocketChannelFactory(
+               Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+         bootstrap = new ServerBootstrap(factory);
+         bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+            public ChannelPipeline getPipeline() {
+               return Channels.pipeline(
+                     new ObjectDecoder(ClassResolvers.cacheDisabled(getClass()
+                           .getClassLoader())), new ObjectEncoder(),
+                     new FirstHandshake());
+            }
+         });
+         bootstrap.setOption("child.tcpNoDelay", true);
+         bootstrap.setOption("child.keepAlive", true);
+         this.buffer = buffer;
+         this.streamRate = streamRate;
+         this.linkIdCoord = linkIdCoord;
+         this.polygon = polygon;
+         this.gf = gf;
+         this.hashCode = this.hashCode();
+         display = StreamJoinDisplay.getInstance("Join Performance Measure",
+               imagesaveDir);
+         display.addToDataSeries(new TimeSeries(timeSeriesTitle, Minute.class),
+               hashCode);
+         valueMap = new HashMap<Integer, Double>();
+         valueMap.put(hashCode, 0.0);
+         writeFile = new FileWriter(writeFileDir + "Ingestion_"
+               + Integer.toString(streamRate.get()) + ".csv");
+         executor.scheduleAtFixedRate(new IngestionMeasure(), 30, 30,
+               TimeUnit.SECONDS);
+         Runtime.getRuntime().addShutdownHook(new Hook());
+      } catch (IOException e) {
+         LOGGER.error("Error writing ingestion to csv file", e);
+      }
 
    }
 
@@ -181,22 +193,29 @@ public class NettyServer<E> {
       int numOfMessages = 0;
 
       public void run() {
-         int noOfMsgsin30sec = count - numOfMessages;
-         numOfMessages = count;
-         if (noOfMsgsin30sec == 0) {
-            noOfMsgsin30sec = 1;
-            LOGGER.info("No messages received in the past 30 seconds...");
-            streamRate.compareAndSet(streamRate.get(), 30000000);
-            valueMap.put(hashCode, 0.0);
-            display.refreshDisplayValues(valueMap);
-         } else {
-            streamRate.compareAndSet(streamRate.get(),
-                  30000000 / noOfMsgsin30sec);
-            LOGGER.info("One message every " + 30000000 / noOfMsgsin30sec
-                  + " microsecond");
-            valueMap.put(hashCode, noOfMsgsin30sec / 30.0);
-            display.refreshDisplayValues(valueMap);
+         try {
+            int noOfMsgsin30sec = count - numOfMessages;
+            numOfMessages = count;
+            if (noOfMsgsin30sec == 0) {
+               noOfMsgsin30sec = 1;
+               LOGGER.info("No messages received in the past 30 seconds...");
+               streamRate.compareAndSet(streamRate.get(), 30000000);
+               valueMap.put(hashCode, 0.0);
+               display.refreshDisplayValues(valueMap);
+            } else {
+               streamRate.compareAndSet(streamRate.get(),
+                     30000000 / noOfMsgsin30sec);
+               LOGGER.info("One message every " + 30000000 / noOfMsgsin30sec
+                     + " microsecond");
+               valueMap.put(hashCode, noOfMsgsin30sec / 30.0);
+               display.refreshDisplayValues(valueMap);
+               writeFile.append(Double.toString(noOfMsgsin30sec / 30.0));
+               writeFile.append("\n");
+               writeFile.flush();
 
+            }
+         } catch (IOException e) {
+            LOGGER.error("Error writing to ingestion measure CSV file");
          }
 
       }

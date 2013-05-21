@@ -13,19 +13,20 @@ public class StreamJoinDisplay extends GenericChartDisplay {
     * The title of the display
     * @param title
     */
-   private StreamJoinDisplay(String title) {
-      super(title);
+   private StreamJoinDisplay(String title, String imageSaveDir) {
+      super(title, imageSaveDir);
 
    }
 
    /**
     * 
     * @param title
+    * @param imageSaveDir
     * @returns a singleton instance
     */
-   public static StreamJoinDisplay getInstance(String title) {
+   public static StreamJoinDisplay getInstance(String title, String imageSaveDir) {
       if (instance == null) {
-         instance = new StreamJoinDisplay(title);
+         instance = new StreamJoinDisplay(title, imageSaveDir);
       }
       return instance;
 

@@ -97,21 +97,13 @@ public class CommonHelper {
 
    public String getLiveArchiveCombineQuery(long dbLoadRate) {
       String liveArchiveJoin;
-      long reclaimFrequency = 2 * dbLoadRate;
-      if (dbLoadRate < 60) {
-         dbLoadRate = 60;
-         reclaimFrequency = 120;
-      }
-      liveArchiveJoin = "@Hint('reclaim_group_aged="
-            + dbLoadRate
-            + ", reclaim_group_freq="
-            + reclaimFrequency
-            + "') select live.linkId,live.speed,live.volume,live.rain,live.temperature,"
+      liveArchiveJoin = "select live.linkId,live.speed,live.volume,live.rain,live.temperature,"
             + "historyAgg.linkId, historyAgg.averageSpeed,historyAgg.averageVolume,live.trafficTime, historyAgg.averageRain "
             + ",historyAgg.averageTemperature,live.evaltime,linkCoordinates from mcomp.dissertation.beans."
             + "LinkTrafficAndWeather as live unidirectional left outer join mcomp.dissertation"
-            + ".beans.AggregatesPerLinkID.std:unique(linkId,`hours`,trafficMinutes) as historyAgg on historyAgg.linkId"
-            + "=live.linkId and historyAgg.trafficMinutes=live.trafficTime.`minutes` and historyAgg.`hours`=live.trafficTime.`hours`";
+            + ".beans.AggregatesPerLinkID.std:unique(linkId,`hours`,trafficMinutes).win:expr(livemins <= trafficMinutes AND livehours <= `hours`) "
+            + "as historyAgg on historyAgg.linkId=live.linkId and "
+            + "historyAgg.trafficMinutes=live.trafficTime.`minutes` and historyAgg.`hours`=live.trafficTime.`hours`";
       return liveArchiveJoin;
    }
 

@@ -103,7 +103,7 @@
             
     </dependencies>
     
-    <name>Database Streamer</name>
+    <name>Weather and traffic combiner</name>
 	<description>Tool for combining live traffic and weather stream data with archive data stored in a MySQL database.</description>
 	<organization>
 		<name>NUS, School of Computing</name>

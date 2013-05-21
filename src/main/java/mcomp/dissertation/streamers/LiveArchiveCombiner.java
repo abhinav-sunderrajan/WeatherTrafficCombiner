@@ -214,7 +214,10 @@ public class LiveArchiveCombiner {
          core = new LiveArchiveCombiner(configFilePath, connectionFilePath);
 
          // Start monitoring the system CPU, memory parameters
-         SigarSystemMonitor sysMonitor = SigarSystemMonitor.getInstance();
+         SigarSystemMonitor sysMonitor = SigarSystemMonitor.getInstance(
+               configProperties.getProperty("memory.file.dir"),
+               streamRate.get(),
+               configProperties.getProperty("image.save.directory"));
          sysMonitor.setCpuUsageScalefactor((Double.parseDouble(configProperties
                .getProperty("cpu.usage.scale.factor"))));
          executor.scheduleAtFixedRate(sysMonitor, 0, 60, TimeUnit.SECONDS);
@@ -268,7 +271,9 @@ public class LiveArchiveCombiner {
                      linkIdCoord,
                      partionByLinkId,
                      "Ingestion rate in number of messages per second for traffic stream",
-                     cepRTLinkFilter);
+                     cepRTLinkFilter, configProperties
+                           .getProperty("ingestion.file.dir.traffic"),
+                     configProperties.getProperty("image.save.directory"));
                streamer.startStreaming();
 
             } else {
@@ -308,7 +313,9 @@ public class LiveArchiveCombiner {
                      linkIdCoord,
                      partionByLinkId,
                      "Ingestion rate in number of messages per second for weather stream",
-                     cepRTLinkFilter);
+                     cepRTLinkFilter, configProperties
+                           .getProperty("ingestion.file.dir.weather"),
+                     configProperties.getProperty("image.save.directory"));
                streamer.startStreaming();
 
             }
@@ -417,11 +424,20 @@ public class LiveArchiveCombiner {
       EPAdministrator cepAdmLiveArchiveJoin = cepLiveArchiveJoin
             .getEPAdministrator();
       CommonHelper.getHelperInstance();
+      cepAdmLiveArchiveJoin.getConfiguration().addVariable("livehours",
+            Integer.class, 0);
+      cepAdmLiveArchiveJoin.getConfiguration().addVariable("livemins",
+            Integer.class, 0);
+      cepAdmLiveArchiveJoin
+            .createEPL("on mcomp.dissertation.beans.LinkTrafficAndWeather as traffic "
+                  + "set livehours = trafficTime.timeStamp.`hours`,livemins=trafficTime.timeStamp.`minutes`");
       EPStatement cepStatement = cepAdmLiveArchiveJoin.createEPL(CommonHelper
             .getHelperInstance().getLiveArchiveCombineQuery(dbLoadRate));
-      cepStatement.setSubscriber(FinalSubscriber
-            .getFinalSubscriberInstance(new InetSocketAddress(Integer
-                  .parseInt(configProperties.getProperty("susbcriber.port")))));
+      cepStatement.setSubscriber(FinalSubscriber.getFinalSubscriberInstance(
+            new InetSocketAddress(Integer.parseInt(configProperties
+                  .getProperty("susbcriber.port"))), configProperties
+                  .getProperty("throughput.file.dir"), streamRate.get(),
+            configProperties.getProperty("image.save.directory")));
       return cepRTLiveArchiveJoin;
 
    }
